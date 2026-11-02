@@ -1,0 +1,120 @@
+/* =========================================================
+   SCROLL-DRIVEN EXPLORE (append to App.css)
+   ========================================================= */
+
+/* IMPORTANT: replace the existing `.app { overflow-x: hidden }` with this.
+   overflow-x: hidden turns .app into a scroll container and breaks position: sticky. */
+.app { position: relative; width: 100%; overflow-x: clip; }
+
+.zoom { position: relative; }
+
+.zoom-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* soft vignette so the tunnel feels like it has depth */
+.zoom-stage::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 45%, rgba(10, 6, 3, 0.45) 100%);
+}
+
+/* every cloud / place lives on its own layer; JS sets transform + opacity */
+.zlayer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* place cards */
+.zplace {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  gap: 8px;
+  width: min(280px, 56vw);
+  aspect-ratio: 3 / 2;
+  padding: 16px;
+  text-align: left;
+  color: #fff;
+  font-family: inherit;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 22px;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.zplace strong {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  line-height: 1.15;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+}
+
+.zplace:hover,
+.zplace:focus-visible {
+  outline: none;
+  border-color: #e0903a;
+  box-shadow: 0 0 0 3px rgba(224, 144, 58, 0.45), 0 18px 40px rgba(0, 0, 0, 0.45);
+}
+
+/* current category name */
+.zoom-hud {
+  position: absolute;
+  left: 32px;
+  bottom: 36px;
+  z-index: 2000;
+  color: #fff;
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(20px, 2.4vw, 30px);
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+/* dot rail: jump to any category */
+.zoom-rail {
+  position: absolute;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.zoom-rail button {
+  position: relative;
+  width: 12px;
+  height: 12px;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.15);
+  transition: transform 0.25s ease, background 0.25s ease;
+}
+
+.zoom-rail button::before { content: ''; position: absolute; inset: -8px; } /* bigger tap area */
+.zoom-rail button.on { background: #e0903a; border-color: #ffc882; transform: scale(1.4); }
+.zoom-rail button:focus-visible { outline: 2px solid #ffd9a0; outline-offset: 4px; }
+
+@media (max-width: 600px) {
+  .zoom-hud { left: 16px; bottom: 24px; }
+  .zoom-rail { right: 10px; gap: 10px; }
+  .zplace strong { font-size: 18px; }
+}
+
+/* You can now delete these old rules: .explore, .explore-inner, .puff*, .cloud-row*, .reveal*, @keyframes puffDrift */
